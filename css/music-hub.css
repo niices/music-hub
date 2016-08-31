@@ -218,8 +218,6 @@
     overflow: hidden;
     height: 2px;
     transition: all .5s;
-    /*transform: translateY(2px);*/
-    /*opacity: 0;*/
     background: rgba(231, 231, 239, .8);
 }
 #music_hub .iceplayer_timeline .iceplayer_timeline_passed{
