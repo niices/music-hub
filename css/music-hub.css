@@ -3,21 +3,27 @@
     position: fixed;
     z-index: 99999;
     width: 350px;
-    height: 288px;
+    height: 92px;
     left: 0;
     bottom: 10px;
     box-sizing: border-box;
     background: #FFF;
     box-shadow: 0 0 20px rgba(59, 59, 177, .18);
+    transition: all .6s cubic-bezier(0, .74, .61, 1.35);
+    transform: translateX(-370px);
 }
-
+#music_hub.hub_show{
+    transform: translateX(0px);
+}
 
 /*iceplayer*/
 
 #music_hub .iceplayer {
+    /*display: none;*/
+    position: relative;
+    z-index: 1000;
     width: 350px;
     height: 92px;
-    position: relative;
 }
 
 
@@ -69,9 +75,6 @@
 }
 
 #music_hub .ctrl_play a img {
-    position: absolute;
-    transition: all .5s;
-    top: 0px;
     width: 25px;
     height: 25px;
 }
@@ -159,8 +162,8 @@
 /*duration*/
 
 #music_hub .duration {
-    font-size: 12px;
     position: absolute;
+    font-size: 12px;
     right: 10px;
     bottom: 10px;
     -webkit-transition: all .6s cubic-bezier(0, .74, .61, 1.35);
@@ -210,6 +213,36 @@
     background: #9dd6c5;
 }
 
+/*toggle*/
+#music_hub .hide{
+    position: absolute;
+    cursor: pointer;
+    right: -20px;
+    width: 20px;
+    height: 20px;
+    background: #dfe8e5;
+    box-shadow: 5px 0 10px rgba(59, 59, 177, .1);
+}
+#music_hub .hide img{
+    margin: 2px;
+    width: 16px;
+    height: 16px;
+}
+#music_hub .show{
+    position: absolute;
+    top: 33px;
+    width: 26px;
+    height: 26px;
+    background: #9dd6c5;
+    cursor: pointer;
+}
+#music_hub .show img{
+    position: fixed;
+    bottom: 43px;
+    left: 0px;
+    width: 26px;
+    height: 26px;
+}
 
 /*lrc*/
 
@@ -243,6 +276,7 @@
 /*list*/
 
 #music_hub .list {
+    display: none;
     width: 350px;
     height: 200px;
     overflow-y: hidden;
@@ -253,10 +287,10 @@
 }
 
 #music_hub .list .list_box li {
+    position: relative;
     list-style: none;
     width: 350px;
     height: 30px;
-    position: relative;
     line-height: 30px;
     background: #fff;
     float: left;
@@ -273,9 +307,9 @@
     float: left;
 }
 #music_hub .list .list_box li .cur {
+    position: absolute;
     width: 3px;
     height: 22px;
-    position: absolute;
     left: 0;
     top: 4px;
     display: none;
