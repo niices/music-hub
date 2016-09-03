@@ -73,9 +73,15 @@ IcePlayer.utils = {
  */
 
 IcePlayer.init = function(options) {
+    var lyricString,
+        lyricArray = [],
+        LYRIC_CURRENT_CLASS = 'lrc_current',
+        LYRIC_NEXT_CLASS = 'lrc_next';
     // 初始状态数据
     var defaultState = {};
+    // 当前正在播放歌曲索引
     defaultState.index = 0;
+    // 当前播放模式
     defaultState.playMod = 0;
     // 判断音乐是否自动播放
     if (options.autoPlay) {
@@ -119,6 +125,7 @@ IcePlayer.init = function(options) {
     HTMLcontent += '        <div class="hide" id="playerHide"><img src="images/close.png" title="关闭"></div>';
     HTMLcontent += '        </div>';
     HTMLcontent += '    <div class="lrc" style="height: 0px;">';
+    HTMLcontent += '        <div class="lrc_area" style="transform: translateY(0px);"></div>';
     HTMLcontent += '    </div>';
     HTMLcontent += '    <div class="list" style="height: 0px;">';
     HTMLcontent += '        <ul class="list_box">';
@@ -161,6 +168,7 @@ IcePlayer.init = function(options) {
     var list = music_hub_content.querySelector('.list');
     var ctrlLrc = music_hub_content.querySelector('.ctrl_lrc');
     var lrc = music_hub_content.querySelector('.lrc');
+    var lrcArea = music_hub_content.querySelector('.lrc_area');
     var ctrlNext = music_hub_content.querySelector('.ctrl_next');
     var musicCoverImg = info.querySelector('.cover>img');
     var musicTitle = info.querySelector('.meta_title');
@@ -169,6 +177,7 @@ IcePlayer.init = function(options) {
     var ctrlModImg = ctrlMod.querySelector('img');
     var list = musicHub.querySelector('.list');
     var listOne = list.querySelectorAll('.list_one');
+    var ctrlLrc = musicHub.querySelector('.ctrl_lrc');
 
 
     // 设置初始音量为60%
@@ -180,7 +189,7 @@ IcePlayer.init = function(options) {
         setTimeout(showPlayer, 100);
     }
 
-    // 默认播放歌单第一首,此为背景
+    // 默认播放歌单第一首
     IcePlayer.utils.addClass(listOne[0], "current_playing");
 
     eventInit();
@@ -206,6 +215,7 @@ IcePlayer.init = function(options) {
                 }
             })(i));
         }
+        ctrlLrc.addEventListener('click', renderLrc);
 
         // 播放器事件
         audio.addEventListener('canplaythrough', handleCanPlayThrough);
@@ -230,11 +240,41 @@ IcePlayer.init = function(options) {
     function handleTimeUpdate() {
         duration = this.duration;
         var curTime = audio.currentTime;
+        var curTimeForLrc = audio.currentTime.toFixed(3);
         var playPercent = 100 * (curTime / duration);
         var remTime = duration - curTime;
 
         timelinePassed.style.width = playPercent.toFixed(2) + '%';
         remainingSignText.innerText = IcePlayer.utils.parseSec(remTime);
+
+        if (lyricString != undefined) {
+            var tempLrcIndex = currentIndex(curTimeForLrc);
+            console.log(curTimeForLrc);
+            console.log(tempLrcIndex);
+            var tempLrcLines = lrcArea.querySelectorAll('p');
+            var tempLrcLinePre = tempLrcLines[tempLrcIndex - 1];
+            var tempLrcLine = tempLrcLines[tempLrcIndex];
+            var tempLrcLineNext = tempLrcLines[tempLrcIndex + 1];
+
+            if (!tempLrcLine.className.includes('lrc_current')) {
+                IcePlayer.utils.removeClass(lrcArea.querySelector('.lrc_current'), 'lrc_current');
+                if (lrcArea.querySelector('.lrc_pre')) {
+                    IcePlayer.utils.removeClass(lrcArea.querySelector('.lrc_pre'), 'lrc_pre');
+                }
+                if (lrcArea.querySelector('.lrc_next')) {
+                    IcePlayer.utils.removeClass(lrcArea.querySelector('.lrc_next'), 'lrc_next');
+                }
+                IcePlayer.utils.addClass(tempLrcLine, 'lrc_current');
+                if (tempLrcLinePre) {
+                    IcePlayer.utils.addClass(tempLrcLinePre, 'lrc_pre');
+                }
+                if (tempLrcLineNext) {
+                    IcePlayer.utils.addClass(tempLrcLineNext, 'lrc_next');
+                }
+
+                lrcArea.style.transform = 'translateY(-' + 20 * tempLrcIndex + 'px)';
+            }
+        }
 
     }
 
@@ -397,4 +437,90 @@ IcePlayer.init = function(options) {
             ctrlModImg.src = "../images/order.png";
         }
     }
+
+    // 请求并生成歌词然后将其渲染到指定节点
+    function renderLrc() {
+        // 请求歌词
+        if (options.musicSource) {
+            IcePlayer.utils.ajax({
+                url: "http://www.niices.com/api/netEaseMusic/?music_id=" + options.playList[defaultState.index].id,
+                success: function(responseText) {
+                    lyricString = JSON.parse(responseText);
+                    lyricString = lyricString.lrc.lyric;
+                    ctrlLrc.removeEventListener('click', renderLrc);
+                    initLrc();
+                },
+                fail: function() {
+                    console.error("拉取歌失败")
+                }
+            })
+        } else {
+            lyricString = options.playList[defaultState.index].lrc;
+            initLrc();
+        }
+
+        // 初始化生成lrc
+        function initLrc() {
+            parse(lyricString);
+            renderTo(lrcArea)
+        }
+
+        // 歌词解析脚本
+        // 修改自：https://github.com/DIYgod/APlayer
+        function parse(text) {
+            var lyric = text.split('\n');
+            var len = lyric.length;
+            var reg1 = /\[(\d{2}):(\d{2})\.(\d{2,3})]/g;
+            var reg2 = /\[(\d{2}):(\d{2})\.(\d{2,3})]/;
+            for (var i = 0; i < len; i++) {
+                var time = lyric[i].match(reg1);
+                var lrcText = lyric[i].replace(reg1, '').replace(/^\s+|\s+$/g, '');
+                // 排除空行
+                if (!lrcText) {
+                    continue;
+                }
+                if (time != null) {
+                    var timeLen = time.length;
+                    for (var j = 0; j < timeLen; j++) {
+                        var oneTime = reg2.exec(time[j]);
+                        var lrcTime = oneTime[1] * 60 + parseInt(oneTime[2]) + parseInt(oneTime[3]) / ((oneTime[3] + '').length === 2 ? 100 : 1000);
+                        lyricArray.push({
+                            time: lrcTime,
+                            text: lrcText
+                        });
+                    }
+                }
+            }
+            lyricArray.sort(function(a, b) {
+                return a.time - b.time;
+            });
+        }
+
+        // 歌词文本解析成DOM结构
+        function renderTo(target) {
+            if (!lyricArray) {
+                console.error('未指定歌词文本！');
+                return;
+            }
+            var lyricHTML = '';
+            for (var i = 0; i < lyricArray.length; i++) {
+                lyricHTML += '<p>' + lyricArray[i].text + '</p>';
+            }
+            target.innerHTML = lyricHTML;
+            target.querySelector('p').className = LYRIC_CURRENT_CLASS;
+            target.querySelector('p + p').className = LYRIC_NEXT_CLASS;
+        }
+    }
+
+    function currentIndex(time) {
+        if (time < lyricArray[0].time) return 0;
+        for (var i = 0, l = lyricArray.length; i < l; i++) {
+            if (time >= lyricArray[i].time && (!lyricArray[i + 1] || time <= lyricArray[i + 1].time)) {
+                break;
+            }
+        }
+        return i;
+    }
+
+    setTimeout(renderLrc(), 500)
 }

@@ -277,19 +277,34 @@
 /*lrc*/
 
 #music_hub .lrc {
-    width: 350px;
-    height: 80px;
+    position: absolute;
+    z-index: -2;
+    top: 50%;
+    left: 50%;
     overflow: hidden;
-    transition: all .6s cubic-bezier(0.4, 0, 1, 1);
+    width: 350px;
+    height: 100%;
+    margin-top: -9px;
+    margin-left: -175px;
+    transition: all 1s;
+    transform: translateY(15px);
+    /*opacity: 0;*/
 }
 
 #music_hub .lrc .lrc_area {
-    text-align: center;
+    margin-top: 30px;
     font-size: 12px;
+    transition: transform .7s;
+    text-align: center;
+    /*opacity: 0;*/
+    color: rgba(0, 0, 0, .7);
 }
 
 #music_hub .lrc .lrc_area p {
-    line-height: 10px;
+    line-height: 20px;
+    transition: all .6s;
+    margin: 0;
+    opacity: 0;
 }
 
 #music_hub .lrc .lrc_area .lrc_current {
@@ -307,7 +322,6 @@
 
 #music_hub .list {
     width: 350px;
-    height: 200px;
     background: #fff;
     overflow-y: hidden;
     transition: all .6s cubic-bezier(0.4, 0, 1, 1);
