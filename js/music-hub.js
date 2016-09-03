@@ -125,7 +125,7 @@ IcePlayer.init = function(options) {
     for (var item in options.playList) {
         HTMLcontent += '            <li class="list_one">';
         HTMLcontent += '                <div class="cur"></div>';
-        HTMLcontent += '                <div class="index">' + (parseInt(item)+1) + '</div>';
+        HTMLcontent += '                <div class="index">' + (parseInt(item) + 1) + '</div>';
         HTMLcontent += '                <div class="name" title="' + options.playList[item].title + '">' + options.playList[item].title + '</div>';
         HTMLcontent += '                <div class="by">' + options.playList[item].author + '</div>';
         HTMLcontent += '            </li>';
@@ -197,11 +197,24 @@ IcePlayer.init = function(options) {
         ctrlLrc.addEventListener('click', lrcToggle);
         ctrlMod.addEventListener('click', ctrlPlayMod);
         ctrlNext.addEventListener('click', nextPlay);
+        for (var i = 0; i < listOne.length; i++) {
+            listOne[i].addEventListener('click', (function(index) {
+                return function() {
+                    IcePlayer.utils.removeClass(listOne[defaultState.index], "current_playing");
+                    defaultState.index = index;
+                    switchMusic(index);
+                }
+            })(i));
+        }
 
         // 播放器事件
         audio.addEventListener('canplaythrough', handleCanPlayThrough);
         audio.addEventListener('timeupdate', handleTimeUpdate);
     }
+
+    audio.onended = function() {
+        nextPlay();
+    };
 
     // canplaythrough事件处理
     function handleCanPlayThrough() {
@@ -342,6 +355,8 @@ IcePlayer.init = function(options) {
         musicTitle.innerHTML = options.playList[index].title;
         musicAuthor.innerHTML = options.playList[index].author;
         IcePlayer.utils.addClass(listOne[index], "current_playing");
+        remainingSign.style.opacity = "0";
+        loadingSign.style.opacity = "1";
     }
 
     // 顺序播放
