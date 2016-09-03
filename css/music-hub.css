@@ -5,7 +5,7 @@
     width: 350px;
     height: 92px;
     left: 0;
-    bottom: 200px;
+    bottom: 10px;
     box-sizing: border-box;
     background: #FFF;
     box-shadow: 0 0 20px rgba(59, 59, 177, .18);
@@ -19,7 +19,6 @@
 /*iceplayer*/
 
 #music_hub .iceplayer {
-    /*display: none;*/
     position: relative;
     z-index: 1000;
     width: 350px;
@@ -50,8 +49,8 @@
 
 #music_hub .meta_title {
     font-size: 14px;
-    margin-top: 15px;
-    margin-bottom: 2px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     letter-spacing: 1px;
     color: #6A6B6F;
 }
@@ -146,16 +145,19 @@
     left: 0;
     top: 0;
 }
+#music_hub .ctrl .ctrl_vol .vol_progress_bar.vol_progress_bar_off {
+    width: 0px;
+}
 
 #music_hub .ctrl .ctrl_vol .vol_progress_bar>img {
     position: absolute;
     left: 20px;
-    top: -10px;
-    width: 21px;
-    height: 21px;
+    top: -5px;
+    width: 11px;
+    height: 11px;
 }
 #music_hub .ctrl .ctrl_vol .vol_progress_bar>img.ctrl_vol_off{
-    left: -10px!important;
+    left: -5px!important;
 }
 
 /*remaining_sign*/
@@ -233,7 +235,7 @@
 #music_hub .timeline .timeline_passed {
     position: absolute;
     bottom: 0;
-    width: 110px;
+    width: 0px;
     height: 100%;
     transition: height .2s ease-in;
     background: #9dd6c5;
@@ -275,10 +277,10 @@
 /*lrc*/
 
 #music_hub .lrc {
-    display: none;
     width: 350px;
-    height: 70px;
+    height: 80px;
     overflow: hidden;
+    transition: all .6s cubic-bezier(0.4, 0, 1, 1);
 }
 
 #music_hub .lrc .lrc_area {
@@ -304,14 +306,16 @@
 /*list*/
 
 #music_hub .list {
-    display: none;
     width: 350px;
     height: 200px;
+    background: #fff;
     overflow-y: hidden;
+    transition: all .6s cubic-bezier(0.4, 0, 1, 1);
 }
 
 #music_hub .list .list_box {
-    padding-left: 0;
+    padding-left: 0px;
+    margin-top: 0px;
 }
 
 #music_hub .list .list_box li {
@@ -324,13 +328,10 @@
     float: left;
 }
 
-#music_hub .list .list_box li.odd {
+#music_hub .list .list_box li:nth-child(odd) {
     background: #f7f7f7;
 }
 
-#music_hub .list .list_box li.current_playing {
-    background: #e9e9e9;
-}
 #music_hub .list .list_box li>div{
     float: left;
 }
@@ -353,6 +354,7 @@
     font-size: 10px;
 }
 #music_hub .list .list_box li .name{
+    cursor: pointer;
     width: 196px;
     text-align: left;
     color: #333333;
