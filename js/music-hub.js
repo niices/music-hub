@@ -215,7 +215,9 @@ IcePlayer.init = function(options) {
                 }
             })(i));
         }
-        ctrlLrc.addEventListener('click', renderLrc);
+        if (lyricString == undefined) {
+            ctrlLrc.addEventListener('click', renderLrc);
+        }
 
         // 播放器事件
         audio.addEventListener('canplaythrough', handleCanPlayThrough);
@@ -249,8 +251,8 @@ IcePlayer.init = function(options) {
 
         if (lyricString != undefined) {
             var tempLrcIndex = currentIndex(curTimeForLrc);
-            console.log(curTimeForLrc);
             console.log(tempLrcIndex);
+            console.log(curTimeForLrc);
             var tempLrcLines = lrcArea.querySelectorAll('p');
             var tempLrcLinePre = tempLrcLines[tempLrcIndex - 1];
             var tempLrcLine = tempLrcLines[tempLrcIndex];
@@ -336,6 +338,11 @@ IcePlayer.init = function(options) {
             volProgressBar.style.width = clickPercent * 100 + '%';
             volProgressDot.style.left = 50 * clickPercent - 10 + 'px';
             audio.volume = clickPercent.toFixed(2);
+            audio.muted = false;
+            volToggleBtnImg.src = "../images/vol-on.png";
+            volToggleBtnImg.title = "静音";
+            IcePlayer.utils.removeClass(volProgressDot, "ctrl_vol_off");
+            IcePlayer.utils.removeClass(volProgressBar, "vol_progress_bar_off");
         }
     }
 
@@ -345,16 +352,20 @@ IcePlayer.init = function(options) {
             list.style.height = "210px";
             musicHub.style.height = "302px";
             ctrlList.style.opacity = "1";
+            list.style.opacity = "1";
         } else if (list.style.height == "0px" && lrc.style.height == "80px") {
             lrc.style.height = "0px";
-            ctrlLrc.style.opacity = "0.7";
             list.style.height = "210px";
             musicHub.style.height = "302px";
+            ctrlLrc.style.opacity = "0.7";
             ctrlList.style.opacity = "1";
+            list.style.opacity = "1";
+            lrc.style.opacity = "0";
         } else {
             list.style.height = "0px";
             musicHub.style.height = "92px";
             ctrlList.style.opacity = "0.7";
+            list.style.opacity = "0";
         }
     }
 
@@ -364,16 +375,20 @@ IcePlayer.init = function(options) {
             lrc.style.height = "80px";
             musicHub.style.height = "172px";
             ctrlLrc.style.opacity = "1";
+            lrc.style.opacity = "1";
         } else if (lrc.style.height == "0px" && list.style.height == "210px") {
             list.style.height = "0px";
-            ctrlList.style.opacity = "0.7";
             lrc.style.height = "80px";
             musicHub.style.height = "172px";
             ctrlLrc.style.opacity = "1";
+            ctrlList.style.opacity = "0.7";
+            lrc.style.opacity = "1";
+            list.style.opacity = "0";
         } else {
             lrc.style.height = "0px";
             musicHub.style.height = "92px";
             ctrlList.style.opacity = "0.7";
+            lrc.style.opacity = "0";
         }
     }
 
@@ -456,13 +471,14 @@ IcePlayer.init = function(options) {
             })
         } else {
             lyricString = options.playList[defaultState.index].lrc;
+            ctrlLrc.removeEventListener('click', renderLrc);
             initLrc();
         }
 
         // 初始化生成lrc
         function initLrc() {
             parse(lyricString);
-            renderTo(lrcArea)
+            renderTo(lrcArea);
         }
 
         // 歌词解析脚本
@@ -521,6 +537,4 @@ IcePlayer.init = function(options) {
         }
         return i;
     }
-
-    setTimeout(renderLrc(), 500)
 }
