@@ -86,13 +86,13 @@ IcePlayer.init = function(options) {
     // 判断音乐是否自动播放
     if (options.autoPlay) {
         defaultState.autoPlay = "autoplay";
-        defaultState.playerShowImgSrc = "images/pause.png";
-        defaultState.ctrlPlayImgSrc = "images/pause.png";
+        defaultState.playerShowImgSrc = "music/images/pause.png";
+        defaultState.ctrlPlayImgSrc = "music/images/pause.png";
         defaultState.ctrlPlayImgTitle = "暂停";
     } else {
         defaultState.autoPlay = "";
-        defaultState.playerShowImgSrc = "images/play.png";
-        defaultState.ctrlPlayImgSrc = "images/play.png";
+        defaultState.playerShowImgSrc = "music/images/play.png";
+        defaultState.ctrlPlayImgSrc = "music/images/play.png";
         defaultState.ctrlPlayImgTitle = "播放";
     }
 
@@ -110,19 +110,19 @@ IcePlayer.init = function(options) {
     HTMLcontent += '        </div>';
     HTMLcontent += '        <div class="ctrl_play"><img src="' + defaultState.ctrlPlayImgSrc + '" title="' + defaultState.ctrlPlayImgTitle + '" class="ctrl_play_img"></div>';
     HTMLcontent += '        <div class="ctrl">';
-    HTMLcontent += '            <div class="ctrl_list" title="歌单"><img src="images/list.png"></div>';
-    HTMLcontent += '            <div class="ctrl_lrc" title="歌词"><img src="images/lrc.png"></div>';
-    HTMLcontent += '            <div class="ctrl_mod" title="顺序播放"><img src="images/order.png"></div>';
+    HTMLcontent += '            <div class="ctrl_list" title="歌单"><img src="music/images/list.png"></div>';
+    HTMLcontent += '            <div class="ctrl_lrc" title="歌词"><img src="music/images/lrc.png"></div>';
+    HTMLcontent += '            <div class="ctrl_mod" title="顺序播放"><img src="music/images/order.png"></div>';
     HTMLcontent += '            <div class="ctrl_vol">';
-    HTMLcontent += '                <img src="images/vol-on.png" title="静音" id="vol_toggle_btn">';
-    HTMLcontent += '                <div class="vol_progress_inner"><div class="vol_progress_bar"><img src="images/dot.png" id="vol_progress_dot"></div></div>';
+    HTMLcontent += '                <img src="music/images/vol-on.png" title="静音" id="vol_toggle_btn">';
+    HTMLcontent += '                <div class="vol_progress_inner"><div class="vol_progress_bar"><img src="music/images/dot.png" id="vol_progress_dot"></div></div>';
     HTMLcontent += '            </div>';
-    HTMLcontent += '            <div class="ctrl_next" title="下一首"><img src="images/next.png"></div>';
+    HTMLcontent += '            <div class="ctrl_next" title="下一首"><img src="music/images/next.png"></div>';
     HTMLcontent += '        </div>';
-    HTMLcontent += '        <div class="remaining_sign"><img src="images/clock.png" title="mod"><span class="remaining_sign_text"></span></div>';
-    HTMLcontent += '        <div class="loading_sign"><img src="images/loading.png" title="loading"><span class="loading_sign_text">loading</span></div>';
+    HTMLcontent += '        <div class="remaining_sign"><img src="music/images/clock.png" title="mod"><span class="remaining_sign_text"></span></div>';
+    HTMLcontent += '        <div class="loading_sign"><img src="music/images/loading.png" title="loading"><span class="loading_sign_text">loading</span></div>';
     HTMLcontent += '        <div class="timeline_bg"><div class="timeline"><div class="timeline_passed"></div></div></div>';
-    HTMLcontent += '        <div class="hide" id="playerHide"><img src="images/close.png" title="关闭"></div>';
+    HTMLcontent += '        <div class="hide" id="playerHide"><img src="music/images/close.png" title="关闭"></div>';
     HTMLcontent += '        </div>';
     HTMLcontent += '    <div class="lrc" style="height: 0px;">';
     HTMLcontent += '        <div class="lrc_area" style="transform: translateY(0px);"></div>';
@@ -304,13 +304,13 @@ IcePlayer.init = function(options) {
     function playToggle() {
         if (ctrlPlayImg.title === "播放") {
             audio.play();
-            showPlayerImg.src = "../images/pause.png";
-            ctrlPlayImg.src = "../images/pause.png";
+            showPlayerImg.src = "music//images/pause.png";
+            ctrlPlayImg.src = "music/images/pause.png";
             ctrlPlayImg.title = "暂停";
         } else {
             audio.pause();
-            showPlayerImg.src = "../images/play.png";
-            ctrlPlayImg.src = "../images/play.png";
+            showPlayerImg.src = "music/images/play.png";
+            ctrlPlayImg.src = "music/images/play.png";
             ctrlPlayImg.title = "播放";
         }
     }
@@ -319,13 +319,13 @@ IcePlayer.init = function(options) {
     function volToggle() {
         if (volToggleBtnImg.title === "静音") {
             audio.muted = true;
-            volToggleBtnImg.src = "../images/vol-off.png";
+            volToggleBtnImg.src = "music/images/vol-off.png";
             volToggleBtnImg.title = "取消静音";
             IcePlayer.utils.addClass(volProgressDot, "ctrl_vol_off");
             IcePlayer.utils.addClass(volProgressBar, "vol_progress_bar_off");
         } else {
             audio.muted = false;
-            volToggleBtnImg.src = "../images/vol-on.png";
+            volToggleBtnImg.src = "music/images/vol-on.png";
             volToggleBtnImg.title = "静音";
             IcePlayer.utils.removeClass(volProgressDot, "ctrl_vol_off");
             IcePlayer.utils.removeClass(volProgressBar, "vol_progress_bar_off");
@@ -340,7 +340,7 @@ IcePlayer.init = function(options) {
             volProgressDot.style.left = 50 * clickPercent - 10 + 'px';
             audio.volume = clickPercent.toFixed(2);
             audio.muted = false;
-            volToggleBtnImg.src = "../images/vol-on.png";
+            volToggleBtnImg.src = "music/images/vol-on.png";
             volToggleBtnImg.title = "静音";
             IcePlayer.utils.removeClass(volProgressDot, "ctrl_vol_off");
             IcePlayer.utils.removeClass(volProgressBar, "vol_progress_bar_off");
@@ -442,15 +442,15 @@ IcePlayer.init = function(options) {
         if (defaultState.playMod == 0) {
             defaultState.playMod = 1;
             ctrlMod.title = "单曲循环";
-            ctrlModImg.src = "../images/repeat.png";
+            ctrlModImg.src = "music/images/repeat.png";
         } else if (defaultState.playMod == 1) {
             defaultState.playMod = 2;
             ctrlMod.title = "随机播放";
-            ctrlModImg.src = "../images/shuffle.png";
+            ctrlModImg.src = "music/images/shuffle.png";
         } else {
             defaultState.playMod = 0;
             ctrlMod.title = "顺序播放";
-            ctrlModImg.src = "../images/order.png";
+            ctrlModImg.src = "music/images/order.png";
         }
     }
 
