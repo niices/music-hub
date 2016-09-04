@@ -3,7 +3,7 @@ window.onload = function() {
      * 配置文件
      */
     // 歌曲来源：来自网易云音乐歌单信息请填 true ，来自本地自定义歌曲信息请填 false 。
-    IcePlayer.musicSource = true;
+    IcePlayer.musicSource = false;
     // 自动播放
     IcePlayer.autoPlay = true;
     IcePlayer.defaultShow = true;

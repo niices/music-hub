@@ -1,3 +1,7 @@
+#music_hub_content{
+    position: absolute;
+    z-index: 99999;
+}
 #music_hub {
     font-family: Helvetica, Tahoma, Arial, STXihei, '华文细黑', 'Microsoft YaHei', '微软雅黑', SimSun, '宋体', Heiti, '黑体', sans-serif;
     position: fixed;
@@ -5,7 +9,8 @@
     width: 350px;
     height: 92px;
     left: 0;
-    bottom: 10px;
+    line-height: 0;
+    bottom: 25px;
     box-sizing: border-box;
     background: #FFF;
     box-shadow: 0 0 20px rgba(59, 59, 177, .18);
@@ -48,7 +53,7 @@
 
 #music_hub .meta_title {
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 5px;
     letter-spacing: 1px;
     color: #6A6B6F;
@@ -56,6 +61,7 @@
 
 #music_hub .meta_author {
     font-size: 12px;
+    margin-top: 20px;
     color: #CECED6;
 }
 
@@ -87,6 +93,9 @@
     width: 200px;
     height: 15px;
 }
+#music_hub img{
+    display: inline-block;
+}
 
 #music_hub .ctrl>div {
     cursor: pointer;
@@ -103,8 +112,10 @@
 }
 
 #music_hub .ctrl>div.ctrl_list img,
+#music_hub .ctrl>div.ctrl_mod img,
 #music_hub .ctrl>div.ctrl_lrc img {
-    height: 12px;
+    height: 13px;
+    margin-top: 1px;
 }
 
 #music_hub .ctrl>div:hover {
@@ -124,7 +135,8 @@
     position: relative;
     left: -20px;
 }
-
+#music_hub .ctrl .ctrl_next>img{
+}
 #music_hub .ctrl .ctrl_vol .vol_progress_inner {
     position: absolute;
     width: 50px;
@@ -166,7 +178,7 @@
     position: absolute;
     font-size: 12px;
     right: 10px;
-    bottom: 10px;
+    bottom: 12px;
     transition: all .6s cubic-bezier(0, .74, .61, 1.35);
     letter-spacing: 1px;
     color: rgba(0, 0, 0, .6);
@@ -190,7 +202,7 @@
     position: absolute;
     font-size: 12px;
     right: 10px;
-    bottom: 10px;
+    bottom: 12px;
     transition: all .6s cubic-bezier(0, .74, .61, 1.35);
     letter-spacing: 1px;
     color: rgba(0, 0, 0, .6);
@@ -261,7 +273,7 @@
 }
 #music_hub_content .show{
     position: fixed;
-    bottom: 43px;
+    bottom: 58px;
     left: 0px;
     width: 26px;
     height: 26px;
@@ -283,7 +295,7 @@
     overflow: hidden;
     width: 350px;
     height: 100%;
-    margin-top: -9px;
+    margin-top: -10px;
     margin-left: -175px;
     transition: all 1s;
     transform: translateY(15px);
@@ -367,7 +379,7 @@
 }
 #music_hub .list .list_box li .name{
     cursor: pointer;
-    width: 196px;
+    width: 190px;
     text-align: left;
     color: #333333;
     font-size: 12px;
@@ -377,7 +389,7 @@
 }
 
 #music_hub .list .list_box li .by{
-    width: 90px;
+    width: 100px;
     text-align: right;
     color: #666;
     font-size: 12px;
