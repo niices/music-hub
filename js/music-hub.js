@@ -128,7 +128,7 @@ IcePlayer.init = function(options) {
     HTMLcontent += '        <div class="lrc_area" style="transform: translateY(0px);"></div>';
     HTMLcontent += '    </div>';
     HTMLcontent += '    <div class="list" style="height: 0px;">';
-    HTMLcontent += '        <ul class="list_box">';
+    HTMLcontent += '        <ul class="list_box" style="margin-top: 0px;">';
     for (var item in options.playList) {
         HTMLcontent += '            <li class="list_one">';
         HTMLcontent += '                <div class="cur"></div>';
@@ -176,6 +176,7 @@ IcePlayer.init = function(options) {
     var ctrlMod = musicHub.querySelector('.ctrl_mod');
     var ctrlModImg = ctrlMod.querySelector('img');
     var list = musicHub.querySelector('.list');
+    var listBox = musicHub.querySelector('.list_box');
     var listOne = list.querySelectorAll('.list_one');
     var ctrlLrc = musicHub.querySelector('.ctrl_lrc');
 
@@ -218,6 +219,8 @@ IcePlayer.init = function(options) {
         if (lyricString == undefined) {
             ctrlLrc.addEventListener('click', renderLrc);
         }
+        // 歌单滚动取消冒泡
+        list.addEventListener('mousewheel', handleMouseWheel);
 
         // 播放器事件
         audio.addEventListener('canplaythrough', handleCanPlayThrough);
@@ -251,8 +254,6 @@ IcePlayer.init = function(options) {
 
         if (lyricString != undefined) {
             var tempLrcIndex = currentIndex(curTimeForLrc);
-            console.log(tempLrcIndex);
-            console.log(curTimeForLrc);
             var tempLrcLines = lrcArea.querySelectorAll('p');
             var tempLrcLinePre = tempLrcLines[tempLrcIndex - 1];
             var tempLrcLine = tempLrcLines[tempLrcIndex];
@@ -528,6 +529,7 @@ IcePlayer.init = function(options) {
         }
     }
 
+    // 当前歌词位置
     function currentIndex(time) {
         if (time < lyricArray[0].time) return 0;
         for (var i = 0, l = lyricArray.length; i < l; i++) {
@@ -536,5 +538,38 @@ IcePlayer.init = function(options) {
             }
         }
         return i;
+    }
+
+    // 歌单滚动取消冒泡
+    function handleMouseWheel(e) { /*当鼠标滚轮事件发生时，执行一些操作*/
+        // var e = e || window.event;
+        // var down = true; // 定义一个标志，当滚轮向下滚时，执行一些操作
+        var maxScrollTop = (options.playList.length -7) * 30;
+        var currentScrollTop = listBox.scrollTop;
+        // var currentMarginTop = parseInt(listBox.style.marginTop);
+        down = e.wheelDelta ? e.wheelDelta < 0 : e.detail > 0;
+        // console.log(down)
+        // console.log(minMarginTop)
+        // if (down) {
+        //     if (currentMarginTop >= minMarginTop) {
+        //         listBox.style.marginTop = currentMarginTop - 5 + 'px';
+        //         console.log(listBox.style.marginTop);
+        //     }
+        // } else {
+        //     if (currentMarginTop < 0) {
+        //         listBox.style.marginTop = currentMarginTop + 5 + 'px';
+        //         console.log(listBox.style.marginTop);
+        //     }
+        // }
+        // console.log(listBox.scrollTop)
+        if (down) {
+            if (currentScrollTop >= maxScrollTop) {
+                e.preventDefault(); // 阻止默认事件
+            }
+        } else {
+            if (currentScrollTop <= 0) {
+                e.preventDefault(); // 阻止默认事件
+            }
+        }
     }
 }
